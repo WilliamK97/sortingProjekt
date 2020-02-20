@@ -12,12 +12,12 @@ export default class SortingContainer extends Component {
     }
 
     componentDidMount = () => {
-        this.RandomArray();
+        this.randomArray();
         this.reversedArray();
         this.manyOfSameValueArray();
     }
 
-    RandomArray = () => {
+    randomArray = () => {
         let array = [];
         for (let i = 0; i < 12; i++) {
           array.push(this.randomNumbersBetweenMinAndMax(5, 100));
@@ -27,8 +27,8 @@ export default class SortingContainer extends Component {
         });
     }
 
-    resetRandomArray = () => {
-        this.RandomArray();
+    resetArrays = () => {
+        this.randomArray();
         this.manyOfSameValueArray();
         this.reversedArray();
     }
@@ -67,8 +67,7 @@ export default class SortingContainer extends Component {
         console.log('bubblesort is running');
         var len = arr.length;
         console.log('array length: ', len);
-        console.log(arr)
-        //var allArrayBars = document.querySelectorAll('.oneItem')
+        console.log(arr);
         for (var i = len-1; i>=0; i--){
             console.log("i: ", i);
             console.log("första iterationen klar, jämför alla element en gång till")
@@ -95,10 +94,6 @@ export default class SortingContainer extends Component {
 
     render() {
 
-        console.log("test");
-        console.log("test");
-        console.log("test");
-
         let renderRandomArray = this.state.randomArray.map((item, key) => {
             return (
                 <div className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
@@ -119,12 +114,13 @@ export default class SortingContainer extends Component {
 
         return (
             <>
-            <h1>Sorting Project</h1>
-            <button onClick={() => this.bubbleSort(this.state.randomArray)}>Bubble Sort</button>
-            <button>Selection Sort</button>
-            <button onClick={this.resetRandomArray}>New Arrays</button>
-            <div className="allArrays">
 
+            <h1>Sorting Project</h1>
+
+            <button onClick={() => this.bubbleSort(this.state.randomArray)}>Bubble Sort</button>
+            <button onClick={this.resetArrays}>New Arrays</button>
+
+            <div className="allArrays">
                 <p>Random Array</p>
                 <div className="randomArray">
                     {renderRandomArray}
@@ -142,18 +138,11 @@ export default class SortingContainer extends Component {
                         
             </div>
 
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <h4>Bubble Sort Gif</h4>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Bubble-sort-example-300px.gif" alt="bubble sort gif"/>
+            <div className="explainingGifs">
+                <h4>Bubble Sort Gif</h4>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Bubble-sort-example-300px.gif" alt="bubble sort gif"/>
+            </div>
+
             </>
         )
     }
