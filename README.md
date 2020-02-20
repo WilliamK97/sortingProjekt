@@ -1,8 +1,8 @@
 ## Sorting projekt
 
-Tanken med detta projekt är att visa hur olika sorterings algoritmer fugerar
+Tanken med detta projekt är att visa hur olika sorterings algoritmer fungerar
 
-## insperation
+## inspiration
 
  https://www.toptal.com/developers/sorting-algorithms 
 

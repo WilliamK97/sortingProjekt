@@ -7,7 +7,7 @@ export default class SortingContainer extends Component {
         this.state = {
           randomArray: [],
           reversedArray: [],
-          manyOfSameValueArray: []
+          manyOfSameValueArray: [],
         };
     }
 
@@ -70,7 +70,6 @@ export default class SortingContainer extends Component {
         console.log(arr);
         for (var i = len-1; i>=0; i--){
             console.log("i: ", i);
-            console.log("första iterationen klar, jämför alla element en gång till")
             for(var j = 1; j<=i; j++){
                 console.log("j: ", j);
                 if(arr[j-1]>arr[j]){
@@ -83,12 +82,18 @@ export default class SortingContainer extends Component {
                     arr[j-1] = arr[j];
                     arr[j] = temp;
                     console.log("nu ser den nya arrayen efter bytet ut så här: ", arr)
+                    this.setState({
+                        randomArray : arr
+                    })
                     
                 }
                 console.log("vänster värdet var lägre än höger... går till nästa jämförelse");
             }
         }
         console.log("final arr: ",arr)
+        // this.setState({
+        //     randomArray : arr
+        // })
         return arr;
     }
 
