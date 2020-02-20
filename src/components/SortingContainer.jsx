@@ -1,3 +1,4 @@
+/* eslint-disable no-loop-func */
 import React, { Component } from 'react'
 import "./styles.css";
 
@@ -59,6 +60,12 @@ export default class SortingContainer extends Component {
         });
     }
 
+    changeRandomArrayState = (arr) => {
+        this.setState({
+            randomArray : arr
+        })
+    }
+
     randomNumbersBetweenMinAndMax = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
@@ -68,8 +75,11 @@ export default class SortingContainer extends Component {
         var len = arr.length;
         console.log('array length: ', len);
         console.log(arr);
+        console.log("j körs 11 gånger för varje i... i körs 11 gånger ")
+                       
         for (var i = len-1; i>=0; i--){
-            console.log("i: ", i);
+            console.log("i: ", i); 
+
             for(var j = 1; j<=i; j++){
                 console.log("j: ", j);
                 if(arr[j-1]>arr[j]){
@@ -77,23 +87,22 @@ export default class SortingContainer extends Component {
                     console.log("compare value vänster: ",arr[j-1]);
                     console.log("compare value höger: ", arr[j]);
                     var temp = arr[j-1];
-                    console.log("temp är compare value vänster: ",temp)
+
+                    // console.log("index of vänster value element in array", arr.findIndex(temp))  
+                    // console.log("index of höger value element in array", arr.findIndex(arr[j]))
+
+                    console.log("temp är lika med compare value vänster: ",temp)
                     console.log("nu byter vänster och högervärdet plats");
                     arr[j-1] = arr[j];
                     arr[j] = temp;
-                    console.log("nu ser den nya arrayen efter bytet ut så här: ", arr)
-                    this.setState({
-                        randomArray : arr
-                    })
-                    
+                    console.log("nu ser den nya arrayen efter bytet ut så här: ", arr);
+                    console.log("state array", this.state.randomArray);
+                    this.changeRandomArrayState(arr) 
                 }
                 console.log("vänster värdet var lägre än höger... går till nästa jämförelse");
             }
         }
         console.log("final arr: ",arr)
-        // this.setState({
-        //     randomArray : arr
-        // })
         return arr;
     }
 
