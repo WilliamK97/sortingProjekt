@@ -6,9 +6,9 @@ export default class SortingContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          randomArray: [],
-          reversedArray: [],
-          manyOfSameValueArray: [],
+            array: [],
+            reversedArray: [],
+            manyOfSameValueArray: [],
         };
     }
 
@@ -24,7 +24,7 @@ export default class SortingContainer extends Component {
           array.push(this.randomNumbersBetweenMinAndMax(5, 100));
         }
         this.setState({
-            randomArray : array
+            array : array
         });
     }
 
@@ -70,45 +70,57 @@ export default class SortingContainer extends Component {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    bubbleSort = (arr) => {
+    bubbleSort = async (arr, arr2, arr3) => {
         console.log('bubblesort is running');
+        const delay = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
         var len = arr.length;
         console.log('array length: ', len);
         console.log(arr);
-        console.log("j körs 11 gånger för varje i... i körs 11 gånger ")
-                       
+        console.log(arr2);
+        console.log(arr3);
+     
         for (var i = len-1; i>=0; i--){
-            console.log("i: ", i); 
-
-            for(var j = 1; j<=i; j++){
-                console.log("j: ", j);
-                if(arr[j-1]>arr[j]){
-                    console.log("om compare value vänster är större än compare value höger körs detta")
-                    console.log("compare value vänster: ",arr[j-1]);
-                    console.log("compare value höger: ", arr[j]);
-                    var temp = arr[j-1];
-
-                    // console.log("index of vänster value element in array", arr.findIndex(temp))  
-                    // console.log("index of höger value element in array", arr.findIndex(arr[j]))
-
-                    console.log("temp är lika med compare value vänster: ",temp)
-                    console.log("nu byter vänster och högervärdet plats");
-                    arr[j-1] = arr[j];
-                    arr[j] = temp;
-                    console.log("nu ser den nya arrayen efter bytet ut så här: ", arr);
-                    console.log("state array", this.state.randomArray);
-                    this.changeRandomArrayState(arr) 
+                 console.log("i: ", i); 
+                 for(var j = 1; j<=i; j++){
+                    console.log("j: ", j);
+                    if(arr[j-1]>arr[j]){
+                        let temp = arr[j-1];
+                        arr[j-1] = arr[j];
+                        arr[j] = temp;
+                        console.log("current array: ", arr);
+                        this.setState({
+                            array: arr
+                        })
+                    }
+                    if(arr2[j-1]>arr2[j]){
+                        let temp = arr2[j-1];
+                        arr2[j-1] = arr2[j];
+                        arr2[j] = temp;
+                        console.log("current array: ", arr2);
+                        this.setState({
+                            reversedArray: arr2
+                        })
+                    }
+                    if(arr3[j-1]>arr3[j]){
+                        let temp = arr3[j-1];
+                        arr3[j-1] = arr3[j];
+                        arr3[j] = temp;
+                        console.log("current array: ", arr3);
+                        this.setState({
+                            manyOfSameValueArray: arr3
+                        })
+                    }  
                 }
-                console.log("vänster värdet var lägre än höger... går till nästa jämförelse");
-            }
-        }
-        console.log("final arr: ",arr)
-        return arr;
+                await delay(100);
+            } 
+            console.log("final array: ", arr)
+            console.log("final array2: ", arr2)
+            console.log("final array3: ", arr3)
     }
 
     render() {
 
-        let renderRandomArray = this.state.randomArray.map((item, key) => {
+        let renderRandomArray = this.state.array.map((item, key) => {
             return (
                 <div className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
             ) 
@@ -131,7 +143,7 @@ export default class SortingContainer extends Component {
 
             <h1>Sorting Project</h1>
 
-            <button onClick={() => this.bubbleSort(this.state.randomArray)}>Bubble Sort</button>
+            <button onClick={() => this.bubbleSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray)}>Bubble Sort</button>
             <button onClick={this.resetArrays}>New Arrays</button>
 
             <div className="allArrays">
@@ -161,5 +173,7 @@ export default class SortingContainer extends Component {
         )
     }
 }
+
+
 
 
