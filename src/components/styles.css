@@ -15,3 +15,7 @@ button{
 .explainingGifs{
     margin-top: 10rem;
 }
+
+.explainingGifs img {
+    width: 15%;
+}

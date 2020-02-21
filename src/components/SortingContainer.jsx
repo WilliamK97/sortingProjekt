@@ -9,6 +9,11 @@ export default class SortingContainer extends Component {
             array: [],
             reversedArray: [],
             manyOfSameValueArray: [],
+            leftBarIndex: 0,
+            rightBarIndex: 1,
+            barValue: 0,
+            clickedOnBubble: false,
+            completedBars: 0
         };
     }
 
@@ -27,17 +32,10 @@ export default class SortingContainer extends Component {
             array : array
         });
     }
-
-    resetArrays = () => {
-        this.randomArray();
-        this.manyOfSameValueArray();
-        this.reversedArray();
-    }
-
     reversedArray = () => {
         let array = [];
         for (let i = 0; i < 12; i++) {
-          array.push((i * 8) + 3);
+        array.push((i * 8) + 3);
         }
         array.reverse();
         this.setState({
@@ -60,43 +58,73 @@ export default class SortingContainer extends Component {
         });
     }
 
-    changeRandomArrayState = (arr) => {
+    resetArrays = () => {
+        this.randomArray();
+        this.manyOfSameValueArray();
+        this.reversedArray();
         this.setState({
-            randomArray : arr
+            barValue : 0,
+            clickedOnBubble : false
         })
     }
+
 
     randomNumbersBetweenMinAndMax = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
+
+    //ändra färg på de stolpar som är klara
+    //när i är lägre än 11 så är stolpen till höger klar
+
+
     bubbleSort = async (arr, arr2, arr3) => {
         console.log('bubblesort is running');
+        this.setState({clickedOnBubble : true})
         const delay = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
-        var len = arr.length;
+        var len = arr.length
+
         console.log('array length: ', len);
-        console.log(arr);
-        console.log(arr2);
-        console.log(arr3);
      
-        for (var i = len-1; i>=0; i--){
-                 console.log("i: ", i); 
-                 for(var j = 1; j<=i; j++){
-                    console.log("j: ", j);
+        for (var i = len-1; i>=0; i--){ 
+            var left = 0;
+            var right = 1
+            this.setState({
+                leftBarIndex: left,
+                rightBarIndex: right
+            })
+            if(i < 11) {
+                console.log("i är minde än 11")
+                this.setState({
+                    completedBars: i 
+                })
+                console.log(this.state.completedBars)
+            }
+            console.log("i",i, "left:", left, "right:", right)
+                for(var j = 1; j<=i; j++){
+                    j === 1 ? left = 0 : left++
+                    j === 1 ? right = 1 : right++
+                    this.setState({
+                        leftBarIndex: left,
+                        rightBarIndex: right
+                    })
+                    console.log("j",j, "left:", left, "right:", right)
+                    console.log(arr)
+                    console.log("nu jämförs stapel: värde:",arr[j-1]," index",left, " mot stapel värde:",arr[j], " index", right)
                     if(arr[j-1]>arr[j]){
+                        console.log("vänster är större än höger... här byter dom 2 staplarna som jämförs plats");
                         let temp = arr[j-1];
                         arr[j-1] = arr[j];
                         arr[j] = temp;
-                        console.log("current array: ", arr);
                         this.setState({
                             array: arr
                         })
+                        console.log("uppdaterad arr: ", arr)
                     }
                     if(arr2[j-1]>arr2[j]){
                         let temp = arr2[j-1];
                         arr2[j-1] = arr2[j];
                         arr2[j] = temp;
-                        console.log("current array: ", arr2);
                         this.setState({
                             reversedArray: arr2
                         })
@@ -105,38 +133,46 @@ export default class SortingContainer extends Component {
                         let temp = arr3[j-1];
                         arr3[j-1] = arr3[j];
                         arr3[j] = temp;
-                        console.log("current array: ", arr3);
                         this.setState({
                             manyOfSameValueArray: arr3
                         })
-                    }  
-                }
-                await delay(100);
-            } 
-            console.log("final array: ", arr)
-            console.log("final array2: ", arr2)
-            console.log("final array3: ", arr3)
+                    }
+                    console.log("väster stapeln var lägre än höger... ny jämförelse")
+                await delay(50);
+            }
+        }
+        this.setState({
+            clickedOnBubble: false
+        })
     }
 
+    onHover = (value) => {
+        this.setState({
+            barValue : value
+        })
+    }
+    
+    //om key är samma som completedBars ska dom barsen bli gröna 
     render() {
-
         let renderRandomArray = this.state.array.map((item, key) => {
-            return (
-                <div className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
-            ) 
+           return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
+           ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+           : <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
         })
 
         let renderReversedArray = this.state.reversedArray.map((item, key) => {
-            return (
-                <div className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
-            ) 
+            return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
+            ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+            : <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
         })
 
         let manyOfSameValueArray = this.state.manyOfSameValueArray.map((item, key) => {
-            return (
-                <div className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
-            ) 
+            return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
+            ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+            : <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
         })
+
+        let renderBarValue = this.state.barValue === 0 ? <p className="barValue">Hover over the bars to see its value</p> : <p className="barValue">{this.state.barValue}</p> 
 
         return (
             <>
@@ -147,6 +183,7 @@ export default class SortingContainer extends Component {
             <button onClick={this.resetArrays}>New Arrays</button>
 
             <div className="allArrays">
+                {renderBarValue}
                 <p>Random Array</p>
                 <div className="randomArray">
                     {renderRandomArray}
@@ -160,8 +197,7 @@ export default class SortingContainer extends Component {
                 <p>Many Of Same Value Array</p>
                 <div className="manyOfSameValueArray">
                     {manyOfSameValueArray}
-                </div>  
-                        
+                </div>            
             </div>
 
             <div className="explainingGifs">
