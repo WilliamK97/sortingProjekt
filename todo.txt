@@ -1,0 +1,3 @@
+disable buttons when sorting
+fix all bar colors when sorting 
+refactor

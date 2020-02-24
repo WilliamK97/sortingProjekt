@@ -35,6 +35,7 @@ export default class SortingContainer extends Component {
             array : array
         });
     }
+
     reversedArray = () => {
         let array = [];
         for (let i = 0; i < 12; i++) {
@@ -83,17 +84,13 @@ export default class SortingContainer extends Component {
         })
     }
 
-
     randomNumbersBetweenMinAndMax = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-
     //ändra färg på de stolpar som är klara
     //när i är lägre än 11 så är stolpen till höger klar
-
-
-    bubbleSort = async (arr, arr2, arr3) => {
+    bubbleSort = async (arr, arr2, arr3, arr4) => {
         console.log('bubblesort is running');
         this.setState({clickedOnBubble : true})
         const delay = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
@@ -152,6 +149,14 @@ export default class SortingContainer extends Component {
                             manyOfSameValueArray: arr3
                         })
                     }
+                    if(arr4[j-1]>arr4[j]){
+                        let temp = arr4[j-1];
+                        arr4[j-1] = arr4[j];
+                        arr4[j] = temp;
+                        this.setState({
+                            almostSortedArray: arr4
+                        })
+                    }
                     console.log("väster stapeln var lägre än höger... ny jämförelse")
                 await delay(50);
             }
@@ -161,7 +166,7 @@ export default class SortingContainer extends Component {
         })
     }
 
-    insertionSort = async (inputArr, inputArr2, inputArr3) => {
+    insertionSort = async (inputArr, inputArr2, inputArr3, inputArr4) => {
 
         let length = inputArr.length;
         const delay = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
@@ -169,9 +174,11 @@ export default class SortingContainer extends Component {
             let key = inputArr[i];
             let key2 = inputArr2[i];
             let key3 = inputArr3[i];
+            let key4 = inputArr4[i];
             let j = i - 1;
             let j1 = i - 1;
             let j2 = i - 1;
+            let j3 = i - 1;
             
             //random array
             while (j >= 0 && inputArr[j] > key) {
@@ -203,11 +210,21 @@ export default class SortingContainer extends Component {
             }
             inputArr3[j2 + 1] = key3;
 
+            //almost sorted
+            while (j3 >= 0 && inputArr4[j3] > key4) {
+                inputArr4[j3 + 1] = inputArr4[j3];
+                j3 = j3 - 1;
+                this.setState({
+                    almostSortedArray: inputArr4
+                })
+            }
+            inputArr4[j3 + 1] = key4;
+
             await delay(50);
         }
     }
 
-    selectionSort = async (arr, arr2, arr3) => {
+    selectionSort = async (arr, arr2, arr3, arr4) => {
 
         let len = arr.length;
         const delay = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
@@ -215,6 +232,7 @@ export default class SortingContainer extends Component {
             let min = i;
             let min2 = i;
             let min3 = i;
+            let min4 = i;
 
             //random array
             for (let j = i + 1; j < len; j++) {
@@ -261,7 +279,22 @@ export default class SortingContainer extends Component {
                 })
             }
 
-            await delay(400);
+            //almost sorted
+            for (let j = i + 1; j < len; j++) {
+                if (arr4[min4] > arr4[j]) {
+                    min4 = j;
+                }
+            }
+            if (min4 !== i) {
+                let tmp = arr4[i];
+                arr4[i] = arr4[min4];
+                arr4[min4] = tmp;
+                this.setState({
+                    almostSortedArray: arr4
+                })
+            }
+
+            await delay(100);
         }
     }
 
@@ -292,7 +325,9 @@ export default class SortingContainer extends Component {
         })
 
         let renderAlmostSortedArray = this.state.almostSortedArray.map((item, key) => {
-            return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+            return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
+           ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+           : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray',height: `${item}px`}}></div>
         })
 
         let renderBarValue = this.state.barValue === 0 ? <p className="barValue">Hover the bars to see its value</p> : <p className="barValue">{this.state.barValue}</p> 
@@ -302,9 +337,9 @@ export default class SortingContainer extends Component {
 
             <h1>Sorting Project</h1>
 
-            <button onClick={() => this.bubbleSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray)}>Bubble Sort</button>
-            <button onClick={() => this.insertionSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray)}>Insertion Sort</button>
-            <button onClick={() => this.selectionSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray)}>Selection Sort</button>
+            <button onClick={() => this.bubbleSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray, this.state.almostSortedArray)}>Bubble Sort</button>
+            <button onClick={() => this.insertionSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray, this.state.almostSortedArray)}>Insertion Sort</button>
+            <button onClick={() => this.selectionSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray, this.state.almostSortedArray)}>Selection Sort</button>
             <button onClick={this.resetArrays}>New Arrays</button>
 
             <BubbleSort />
