@@ -1,6 +1,7 @@
 /* eslint-disable no-loop-func */
 import React, { Component } from 'react'
 import "./styles.css";
+import BubbleSort from "./BubbleSort" 
 
 export default class SortingContainer extends Component {
     constructor(props) {
@@ -96,9 +97,9 @@ export default class SortingContainer extends Component {
             if(i < 11) {
                 console.log("i är minde än 11")
                 this.setState({
-                    completedBars: i 
+                    completedBars: i + 1
                 })
-                console.log(this.state.completedBars)
+                console.log("complete bars: ", this.state.completedBars)
             }
             console.log("i",i, "left:", left, "right:", right)
                 for(var j = 1; j<=i; j++){
@@ -146,30 +147,115 @@ export default class SortingContainer extends Component {
         })
     }
 
+    insertionSort = (inputArr, inputArr2, inputArr3) => {
+        console.log("initial random array in insertionsort function: ",inputArr)
+        console.log("initial reversed array in insertionsort function: ",inputArr2)
+        console.log("initial few uniques array in insertionsort function: ",inputArr3)
+        let length = inputArr.length;
+        for (let i = 1; i < length; i++) {
+            let key = inputArr[i];
+            let key2 = inputArr2[i];
+            let key3 = inputArr3[i];
+            let j = i - 1;
+            
+            //random array
+            while (j >= 0 && inputArr[j] > key) {
+                inputArr[j + 1] = inputArr[j];
+                j = j - 1;
+            }
+            inputArr[j + 1] = key;
+
+            //reversed array
+            while (j >= 0 && inputArr2[j] > key2) {
+                inputArr2[j + 1] = inputArr2[j];
+                j = j - 1;
+            }
+            inputArr2[j + 1] = key2;
+
+            //few uniques array
+            while (j >= 0 && inputArr3[j] > key3) {
+                inputArr3[j + 1] = inputArr3[j];
+                j = j - 1;
+            }
+            inputArr3[j + 1] = key3;
+        }
+        console.log("insertionSort sort final random array: ", inputArr)
+        console.log("insertionSort sort final reversed array: ", inputArr2)
+        console.log("insertionSort sort final few uniques array: ", inputArr3)
+        return inputArr;
+    }
+
+    selectionSort = (arr, arr2, arr3) => {
+        console.log("initial array in selectionSort function: ", arr)
+        let len = arr.length;
+        for (let i = 0; i < len; i++) {
+            let min = i;
+
+            //random array
+            for (let j = i + 1; j < len; j++) {
+                if (arr[min] > arr[j]) {
+                    min = j;
+                }
+            }
+            if (min !== i) {
+                let tmp = arr[i];
+                arr[i] = arr[min];
+                arr[min] = tmp;
+            }
+
+            //reversed array
+            for (let j = i + 1; j < len; j++) {
+                if (arr2[min] > arr2[j]) {
+                    min = j;
+                }
+            }
+            if (min !== i) {
+                let tmp = arr2[i];
+                arr2[i] = arr2[min];
+                arr2[min] = tmp;
+            }
+
+            //few uniques array
+            for (let j = i + 1; j < len; j++) {
+                if (arr3[min] > arr3[j]) {
+                    min = j;
+                }
+            }
+            if (min !== i) {
+                let tmp = arr3[i];
+                arr3[i] = arr3[min];
+                arr3[min] = tmp;
+            }
+
+        }
+        console.log("selection sort final random array: ", arr)
+        return arr;
+    }
+
     onHover = (value) => {
         this.setState({
             barValue : value
         })
     }
-    
-    //om key är samma som completedBars ska dom barsen bli gröna 
+
+    //om key är samma som completedBars ska dom barsen bli gröna == className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"}
     render() {
         let renderRandomArray = this.state.array.map((item, key) => {
            return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
            ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
-           : <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
+           : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray',height: `${item}px`}}></div>
         })
 
         let renderReversedArray = this.state.reversedArray.map((item, key) => {
             return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
             ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
-            : <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
+            : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
         })
 
         let manyOfSameValueArray = this.state.manyOfSameValueArray.map((item, key) => {
             return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
             ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
-            : <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'black', height: `${item}px`}}></div>
+            : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
         })
 
         let renderBarValue = this.state.barValue === 0 ? <p className="barValue">Hover over the bars to see its value</p> : <p className="barValue">{this.state.barValue}</p> 
@@ -180,7 +266,11 @@ export default class SortingContainer extends Component {
             <h1>Sorting Project</h1>
 
             <button onClick={() => this.bubbleSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray)}>Bubble Sort</button>
+            <button onClick={() => this.insertionSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray)}>Insertion Sort</button>
+            <button onClick={() => this.selectionSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray)}>Selection Sort</button>
             <button onClick={this.resetArrays}>New Arrays</button>
+
+            <BubbleSort />
 
             <div className="allArrays">
                 {renderBarValue}
@@ -203,6 +293,10 @@ export default class SortingContainer extends Component {
             <div className="explainingGifs">
                 <h4>Bubble Sort Gif</h4>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Bubble-sort-example-300px.gif" alt="bubble sort gif"/>
+                <h4>Insertion Sort Gif</h4>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Insertion-sort-example.gif" alt="Incertion sort gif"/>
+                <h4>Selection Sort Gif</h4>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/94/Selection-Sort-Animation.gif" alt="selection sort gif"/>
             </div>
 
             </>
