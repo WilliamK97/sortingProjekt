@@ -10,6 +10,7 @@ export default class SortingContainer extends Component {
             array: [],
             reversedArray: [],
             manyOfSameValueArray: [],
+            almostSortedArray: [],
             leftBarIndex: 0,
             rightBarIndex: 1,
             barValue: 0,
@@ -22,6 +23,7 @@ export default class SortingContainer extends Component {
         this.randomArray();
         this.reversedArray();
         this.manyOfSameValueArray();
+        this.almostSortedArray();
     }
 
     randomArray = () => {
@@ -59,10 +61,22 @@ export default class SortingContainer extends Component {
         });
     }
 
+    almostSortedArray = () => {
+        let array = [];
+        let randomNumberBetween2And5 = Math.floor(Math.random() * 8) + 1  
+        for (let i = 0; i < 12; i++) {
+            array.push(Math.floor(Math.random() * i * randomNumberBetween2And5) + 50 );
+        }
+        this.setState({
+            almostSortedArray: array
+        }) 
+    }
+
     resetArrays = () => {
         this.randomArray();
         this.manyOfSameValueArray();
-        this.reversedArray();
+        this.reversedArray(); 
+        this.almostSortedArray();
         this.setState({
             barValue : 0,
             clickedOnBubble : false
@@ -147,49 +161,60 @@ export default class SortingContainer extends Component {
         })
     }
 
-    insertionSort = (inputArr, inputArr2, inputArr3) => {
-        console.log("initial random array in insertionsort function: ",inputArr)
-        console.log("initial reversed array in insertionsort function: ",inputArr2)
-        console.log("initial few uniques array in insertionsort function: ",inputArr3)
+    insertionSort = async (inputArr, inputArr2, inputArr3) => {
+
         let length = inputArr.length;
+        const delay = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
         for (let i = 1; i < length; i++) {
             let key = inputArr[i];
             let key2 = inputArr2[i];
             let key3 = inputArr3[i];
             let j = i - 1;
+            let j1 = i - 1;
+            let j2 = i - 1;
             
             //random array
             while (j >= 0 && inputArr[j] > key) {
                 inputArr[j + 1] = inputArr[j];
                 j = j - 1;
+                this.setState({
+                    array: inputArr
+                })
             }
             inputArr[j + 1] = key;
 
             //reversed array
-            while (j >= 0 && inputArr2[j] > key2) {
-                inputArr2[j + 1] = inputArr2[j];
-                j = j - 1;
+            while (j1 >= 0 && inputArr2[j1] > key2) {
+                inputArr2[j1 + 1] = inputArr2[j1];
+                j1 = j1 - 1;
+                this.setState({
+                    reversedArray: inputArr2
+                })
             }
-            inputArr2[j + 1] = key2;
+            inputArr2[j1 + 1] = key2;
 
             //few uniques array
-            while (j >= 0 && inputArr3[j] > key3) {
-                inputArr3[j + 1] = inputArr3[j];
-                j = j - 1;
+            while (j2 >= 0 && inputArr3[j2] > key3) {
+                inputArr3[j2 + 1] = inputArr3[j2];
+                j2 = j2 - 1;
+                this.setState({
+                    manyOfSameValueArray: inputArr3
+                })
             }
-            inputArr3[j + 1] = key3;
+            inputArr3[j2 + 1] = key3;
+
+            await delay(50);
         }
-        console.log("insertionSort sort final random array: ", inputArr)
-        console.log("insertionSort sort final reversed array: ", inputArr2)
-        console.log("insertionSort sort final few uniques array: ", inputArr3)
-        return inputArr;
     }
 
-    selectionSort = (arr, arr2, arr3) => {
-        console.log("initial array in selectionSort function: ", arr)
+    selectionSort = async (arr, arr2, arr3) => {
+
         let len = arr.length;
+        const delay = (ms) => new Promise((resolve, reject) => setTimeout(resolve, ms));
         for (let i = 0; i < len; i++) {
             let min = i;
+            let min2 = i;
+            let min3 = i;
 
             //random array
             for (let j = i + 1; j < len; j++) {
@@ -201,35 +226,43 @@ export default class SortingContainer extends Component {
                 let tmp = arr[i];
                 arr[i] = arr[min];
                 arr[min] = tmp;
+                this.setState({
+                    array: arr
+                })
             }
 
             //reversed array
             for (let j = i + 1; j < len; j++) {
-                if (arr2[min] > arr2[j]) {
-                    min = j;
+                if (arr2[min2] > arr2[j]) {
+                    min2 = j;
                 }
             }
-            if (min !== i) {
+            if (min2 !== i) {
                 let tmp = arr2[i];
-                arr2[i] = arr2[min];
-                arr2[min] = tmp;
+                arr2[i] = arr2[min2];
+                arr2[min2] = tmp;
+                this.setState({
+                    reversedArray: arr2
+                })
             }
 
             //few uniques array
             for (let j = i + 1; j < len; j++) {
-                if (arr3[min] > arr3[j]) {
-                    min = j;
+                if (arr3[min3] > arr3[j]) {
+                    min3 = j;
                 }
             }
-            if (min !== i) {
+            if (min3 !== i) {
                 let tmp = arr3[i];
-                arr3[i] = arr3[min];
-                arr3[min] = tmp;
+                arr3[i] = arr3[min3];
+                arr3[min3] = tmp;
+                this.setState({
+                    manyOfSameValueArray: arr3
+                })
             }
 
+            await delay(400);
         }
-        console.log("selection sort final random array: ", arr)
-        return arr;
     }
 
     onHover = (value) => {
@@ -258,7 +291,11 @@ export default class SortingContainer extends Component {
             : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
         })
 
-        let renderBarValue = this.state.barValue === 0 ? <p className="barValue">Hover over the bars to see its value</p> : <p className="barValue">{this.state.barValue}</p> 
+        let renderAlmostSortedArray = this.state.almostSortedArray.map((item, key) => {
+            return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+        })
+
+        let renderBarValue = this.state.barValue === 0 ? <p className="barValue">Hover the bars to see its value</p> : <p className="barValue">{this.state.barValue}</p> 
 
         return (
             <>
@@ -287,7 +324,13 @@ export default class SortingContainer extends Component {
                 <p>Many Of Same Value Array</p>
                 <div className="manyOfSameValueArray">
                     {manyOfSameValueArray}
-                </div>            
+                </div>   
+
+                <p>Almost Sorted Array</p>
+                <div className="almostSorted">
+                    {renderAlmostSortedArray}
+                </div>
+
             </div>
 
             <div className="explainingGifs">
