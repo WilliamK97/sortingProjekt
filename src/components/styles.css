@@ -1,19 +1,13 @@
-.allArrays{
-
-}
-
 .oneItem{
     width: 5px;
     margin: 0 2px;
     display: inline-block;
-    background-color: gray;
 }
 
 .oneItemCompleted{
     width: 5px;
     margin: 0 2px;
     display: inline-block;
-    background-color: 'black';
 }
 
 button{

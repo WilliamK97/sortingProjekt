@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
-export default class BubbleSort extends Component {
+export default class InsertionSort extends Component {
     render() {
         return (
             <div>
-                bubble
+                insert
             </div>
         )
     }

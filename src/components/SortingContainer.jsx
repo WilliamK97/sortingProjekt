@@ -1,7 +1,9 @@
 /* eslint-disable no-loop-func */
 import React, { Component } from 'react'
 import "./styles.css";
-import BubbleSort from "./BubbleSort" 
+// import BubbleSort from "./BubbleSort";
+// import SelectionSort from "./SelectionSort";
+// import InsertionSort from "./InsertionSort";
 
 export default class SortingContainer extends Component {
     constructor(props) {
@@ -80,7 +82,8 @@ export default class SortingContainer extends Component {
         this.almostSortedArray();
         this.setState({
             barValue : 0,
-            clickedOnBubble : false
+            clickedOnBubble : false,
+            completedBars: 0
         })
     }
 
@@ -88,8 +91,6 @@ export default class SortingContainer extends Component {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    //ändra färg på de stolpar som är klara
-    //när i är lägre än 11 så är stolpen till höger klar
     bubbleSort = async (arr, arr2, arr3, arr4) => {
         console.log('bubblesort is running');
         this.setState({clickedOnBubble : true})
@@ -306,28 +307,55 @@ export default class SortingContainer extends Component {
 
     //om key är samma som completedBars ska dom barsen bli gröna == className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"}
     render() {
-        let renderRandomArray = this.state.array.map((item, key) => {
-           return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
-           ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
-           : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray',height: `${item}px`}}></div>
+
+        console.log("test test",this.state.completedBars);
+
+        let renderRandomArrayTest = this.state.array.map((item, key) => {
+            if(key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+            }
+            else if(key === this.state.completedBars && this.state.clickedOnBubble === true && this.state.completedBars !== 0) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'rgb(124,252,0)', height: `${item}px`}}></div> 
+            }
+            else{
+                return <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+            }
         })
 
         let renderReversedArray = this.state.reversedArray.map((item, key) => {
-            return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
-            ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
-            : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+            if(key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+            }
+            else if(key === this.state.completedBars && this.state.clickedOnBubble === true && this.state.completedBars !== 0) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'rgb(124,252,0)', height: `${item}px`}}></div> 
+            }
+            else{
+                return <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+            }
         })
 
         let manyOfSameValueArray = this.state.manyOfSameValueArray.map((item, key) => {
-            return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
-            ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
-            : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+            if(key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+            }
+            else if(key === this.state.completedBars && this.state.clickedOnBubble === true && this.state.completedBars !== 0) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'rgb(124,252,0)', height: `${item}px`}}></div> 
+            }
+            else{
+                return <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+            }
         })
 
         let renderAlmostSortedArray = this.state.almostSortedArray.map((item, key) => {
-            return key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex 
-           ? <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
-           : <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray',height: `${item}px`}}></div>
+            if(key === this.state.leftBarIndex && this.state.clickedOnBubble === true && key + 1 === this.state.rightBarIndex) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'blue', height: `${item}px`}}></div> 
+            }
+            else if(key === this.state.completedBars && this.state.clickedOnBubble === true && this.state.completedBars !== 0) {
+                return <div onMouseOver={() => this.onHover(item)} className="oneItem" key={key} style={{backgroundColor: 'rgb(124,252,0)', height: `${item}px`}}></div> 
+            }
+            else{
+                return <div onMouseOver={() => this.onHover(item)} className={key === this.state.completedBars ? "oneItemCompleted" : "oneItem"} key={key} style={{backgroundColor: 'gray', height: `${item}px`}}></div>
+            }
         })
 
         let renderBarValue = this.state.barValue === 0 ? <p className="barValue">Hover the bars to see its value</p> : <p className="barValue">{this.state.barValue}</p> 
@@ -342,13 +370,12 @@ export default class SortingContainer extends Component {
             <button onClick={() => this.selectionSort(this.state.array, this.state.reversedArray, this.state.manyOfSameValueArray, this.state.almostSortedArray)}>Selection Sort</button>
             <button onClick={this.resetArrays}>New Arrays</button>
 
-            <BubbleSort />
 
             <div className="allArrays">
                 {renderBarValue}
                 <p>Random Array</p>
                 <div className="randomArray">
-                    {renderRandomArray}
+                    {renderRandomArrayTest}
                 </div>
 
                 <p>Reversed Array</p>
